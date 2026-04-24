@@ -1,363 +1,79 @@
-# Processo Seletivo – Intensivo Maker | AI
+# Desafio MNIST: Classificação de Dígitos para Edge AI
 
-Bem-vindo(a) à **etapa prática do processo seletivo para o Intensivo Maker**.
 
-Esta atividade tem como objetivo avaliar competências técnicas relacionadas a **Machine Learning**, **Visão Computacional** e **Otimização de modelos para sistemas embarcados (Edge AI)**, a partir da aplicação prática dos conhecimentos adquiridos nos cursos EAD da etapa anterior.
-
-> 🎯 **Importante**  
-> O foco deste desafio é avaliar sua capacidade de **projetar, treinar e otimizar um modelo de IA**.  
+* **Nome:** João Henrique de Brito Leandro Bitu Corrêa
 
 ---
 
-## 📌 Navegação Rápida
-
-- 🏁 [Passo 0 – Antes de Tudo](#-passo-0-antes-de-tudo)
-- ⚙ [Passo 1 – Preparando o Ambiente](#-passo-1-preparando-o-ambiente)
-- 💻 [Passo 2 – O Desafio Técnico](#-passo-2-o-desafio-técnico)
-  - 🎯 [Conjunto de Dados](#-conjunto-de-dados)
-  - 📂 [Estrutura do Projeto](#-estrutura-do-projeto)
-  - 📚 [Material de Apoio](#-material-de-apoio)
-  - ⚖️ [Critérios de Avaliação](#️-critérios-de-avaliação)
-- 📤 [Passo 3 – Instruções de Entrega](#-passo-3-instruções-de-entrega)
-  - 📝 [Relatório do Candidato](#-relatório-do-candidato)
+## 1. Visão Geral do Projeto
+Este projeto consiste no desenvolvimento, treinamento e otimização de uma Rede Neural Convolucional (CNN) para o reconhecimento de dígitos manuscritos (MNIST). O foco central foi desenvolver um modelo voltado para o Edge AI, buscando uma arquitetura que equilibre alta acurácia com baixo consumo de recursos, permitindo a execução em dispositivos de hardware limitado como microcontroladores e sistemas embarcados.
 
 ---
 
-## 🏁 Passo 0: Antes de Tudo
+## 2. Treinamento e Arquitetura do Modelo (train_model.py)
+Para atingir o nível máximo de eficiência, a arquitetura foi desenhada seguindo princípios de extratividade e simplicidade:
 
-Caso você **nunca tenha utilizado Git ou GitHub**, não se preocupe.  
-Siga atentamente as etapas abaixo.
-
-
-### 1️⃣ Criação de Conta no GitHub
-
-1. Acesse: https://github.com  
-2. Clique em **Sign up**  
-3. Crie sua conta gratuita seguindo as instruções da plataforma  
-
-(*O GitHub será utilizado para envio, versionamento e correção automática do seu projeto.*)
-
-
-### 2️⃣ Instalação do Git
-
-O **Git** é a ferramenta que permite versionar e enviar seu código para o GitHub.
-
-- **Windows**  
-  Baixe e instale o **Git Bash**:  
-  https://git-scm.com/downloads
-
-- **Linux / macOS**  
-  Verifique se o Git já está instalado:
-  ```bash
-  git --version
-  ```
+* **Arquitetura:** CNN com 3 camadas convolucionais.
+    * **Layer 1 (Conv2D):** 32 filtros (3x3), ativação ReLU. Extração de padrões geométricos primários.
+    * **Max Pooling:** Redução de dimensionalidade para diminuir o custo computacional das camadas seguintes.
+    * **Layer 2 (Conv2D):** 64 filtros (3x3), ativação ReLU. Reconhecimento de formas complexas e curvas.
+    * **Max Pooling:** Segunda redução espacial.
+    * **Layer 3 (Conv2D):** 64 filtros (3x3), ativação ReLU. Refinamento de características para a classificação final.
+    * **Flatten & Dense:** Camada densa com 64 neurônios para lógica final de classificação e camada de saída com Softmax para as 10 classes (0-9).
+* **Justificativa:** O uso de MaxPooling entre as camadas garante que o modelo seja leve, processando apenas as informações essenciais e economizando ciclos de CPU, respeitando as restrições de tempo de execução do pipeline de integração contínua (CI).
 
 ---
 
-## ⚙ Passo 1: Preparando o Ambiente
+## 3. Métricas de Resultado
+O desempenho foi validado através de métricas claras e precisas:
 
-Para desenvolver o desafio, você deverá criar uma cópia deste repositório.
-
-### 1️⃣ Fork do Repositório
-
-<img width="219" height="45" alt="image" src="https://github.com/user-attachments/assets/5d629626-513a-445c-ba0f-e5bb3e225187" />
-
-1. No canto superior direito desta página, clique em **Fork**  
-2. Uma cópia deste repositório será criada no **seu perfil do GitHub**
-(*O Fork permite que você trabalhe de forma independente sem alterar o repositório original.*)
-
-
-
-### 2️⃣ Clone do Repositório
-
-<img width="149" height="52" alt="image" src="https://github.com/user-attachments/assets/abbd331b-a005-4633-89c6-afd16acbe828" />
-
-No repositório do **seu Fork**, clique em **<> Code**, copie a URL e execute:
-
-```bash
-git clone https://github.com/SEU_USUARIO/nome-do-repositorio.git
-cd nome-do-repositorio
-```
-(*O comando `git clone` cria uma cópia do repositório.*)
-
-
-
-### 3️⃣ Preparação do Ambiente de Execução
-
-Você pode executar o projeto de **Três formas**. Escolha apenas uma.
-
-
-
-#### Opção A – Ambiente Python Local 
-Requisitos:
-- Python **3.10 ou 3.11**
-- pip
-
-Instale as dependências com:
-
-```bash
-pip install -r requirements.txt
-```
-
-
-
-#### Opção B – Dev Container 
-Este repositório inclui um **Dev Container** para facilitar a criação de um ambiente Python padronizado.
-
-**Requisitos**
-- VS Code
-- Docker instalado
-- Extensão **Dev Containers**
-
-**Passos**
-1. Abra o repositório no VS Code  
-2. Selecione **“Reopen in Container”**  
-3. Aguarde a criação automática do ambiente  
-
-➡️ As dependências serão instaladas automaticamente.
-
-
-#### Opção C - via browser
-Você também pode abrir o container via github codespace
-
-1. Clique em **<> Code**
-2. Clique em **Codespaces**
-3. Clique em **Create codespace on image**
-
-<img width="482" height="436" alt="image" src="https://github.com/user-attachments/assets/37a1e99d-66d2-4730-b824-26f834bd8cc3" />
-
-
->  Será aberto uma instância do VS Code no seu navegador com o container configurado
-
+* **Acurácia:** O modelo atingiu 99.08% no conjunto de testes tanto no modelo original (Keras) quanto no otimizado (TFLite).
+* **Loss Function:** Utilizada a Sparse Categorical Crossentropy, ideal para classificação multiclasse de dígitos.
+* **Batch Size & Epochs:** O treino foi configurado para 5 épocas, atingindo a convergência máxima sem sofrer overfitting e garantindo um modelo leve e com alto poder de generalização.
 
 ---
 
-## 💻 Passo 2: O Desafio Técnico
+## 4. Geração do Modelo Treinado e Comparativo de Tamanho
+Os artefatos foram salvos e otimizados, apresentando uma redução drástica no consumo de armazenamento:
 
-O desafio consiste em desenvolver um **modelo de Visão Computacional** capaz de **classificar dígitos manuscritos**, e posteriormente **otimizá-lo para execução em dispositivos Edge**, como sistemas embarcados e IoT.
+* **Modelo Keras (model.h5):** 1,11 MB
+* **Modelo TFLite (model.tflite):** 101 KB
+* **Taxa de Compressão:** Redução de aproximadamente 91% no tamanho total do arquivo.
 
-O foco não é apenas obter alta acurácia, mas também **compreender o fluxo completo**:
-
-**treinamento → salvamento → conversão → otimização**
-
-
-
-### 🎯 Conjunto de Dados
-
-Será utilizado o dataset **MNIST**, composto por imagens de dígitos manuscritos de **0 a 9**.
-<img width="500" height="294" alt="image" src="https://github.com/user-attachments/assets/f323b4cc-d759-4e05-bb58-13e4d6dc7e5b" />
-
-✔️ O dataset já está disponível na biblioteca **TensorFlow/Keras**, não sendo necessário download manual.
-
-📌 *O MNIST é amplamente utilizado para introdução à Visão Computacional e Redes Neurais.*
-
-
-
-###  ✅ Requisitos Obrigatórios
-
-**Etapa 1:**  Treinamento do Modelo (`train_model.py`)
-
-Implemente no arquivo `train_model.py` um código que realize:
-
-- Carregamento do dataset MNIST via TensorFlow
-- Construção e treinamento de um modelo de classificação baseado em **Redes Neurais Convolucionais (CNN)**  
-  (utilizando camadas `Conv2D` e `MaxPooling`)
-- Treinamento do modelo
-- Exibição da **acurácia final** no terminal
-- Salvamento do modelo treinado no formato **Keras** (`.h5`)
-
-(*O modelo salvo será utilizado na etapa de otimização.*)
-
-
-
-**Etapa 2:** Otimização do Modelo (`optimize_model.py`)
-
-No arquivo `optimize_model.py`, implemente:
-
-- Carregamento do modelo treinado
-- Conversão para **TensorFlow Lite (`.tflite`)**
-- Aplicação de técnica de otimização, como:
-  - **Dynamic Range Quantization**
-
-(**Objetivo:** reduzir o tamanho do modelo, mantendo desempenho adequado para aplicações de **Edge AI**.)
-
-
-
-### 📂 Estrutura do Projeto
-
-⚠️ **Atenção:**  
-A estrutura e os nomes dos arquivos **não devem ser alterados**.
-
-```plaintext
-seu-repositorio/
-├── .github/
-│   └── workflows/
-│       └── ci.yml            # 🤖 Pipeline de correção automática (NÃO ALTERAR)
-├── .devcontainer/            # 🐳 Dev Container (opcional)
-│   └── devcontainer.json
-├── train_model.py            # ✏️ Treinamento do modelo
-├── optimize_model.py         # ✏️ Conversão e otimização
-├── requirements.txt          # 📄 Dependências do projeto
-├── model.h5                  # 🤖 Modelo treinado (gerado)
-├── model.tflite              # ⚡ Modelo otimizado (gerado)
-└── README.md                 # 📝 Relatório final do candidato
-```
-
-
-
-### ⚠️ Restrições e Considerações de Engenharia
-
-Este desafio é avaliado automaticamente por meio de um pipeline de
-**integração contínua (CI)**, executado em um ambiente controlado e com
-restrições de recursos computacionais.
-
-Você **não precisa conhecer GitHub Actions** para realizar o desafio.
-No entanto, é importante respeitar as diretrizes abaixo.
-
-**Diretrizes para o Modelo**
-
-- O modelo deve ser uma **CNN simples**, adequada para **Edge AI**
-- Evite arquiteturas muito profundas ou complexas
-- Recomenda-se utilizar **até 3 camadas convolucionais**
-- **Não utilize modelos pré-treinados**
-- Número de épocas **limitado** (ex: até 5)
-
-#### Diretrizes de Execução
-
-- Treinamento apenas em **CPU**
-- Tempo total reduzido (compatível com CI)
-- Código deve executar do início ao fim **sem intervenção manual**
-
-> **Importante:**  
-> O objetivo não é obter a maior acurácia possível, mas sim demonstrar
-> **engenharia eficiente**, compatível com ambientes automatizados e
-> restrições típicas de aplicações reais de Edge AI.
-
-
-
-### 📚 Material de Apoio
-
-Os cursos realizados na etapa anterior **devem ser utilizados como referência**.
-
-- 📘 **Fundamentos de Inteligência Artificial para Sistemas Embarcados**
-- 👁️ **Sistemas de Visão Computacional Embarcada**
-- ⚙️ **Otimização de Modelos em Sistemas Embarcados**
-
-(*Os exemplos apresentados nesses cursos podem ser adaptados e reutilizados neste desafio.*)
-
-
-
-### ⚖️ Critérios de Avaliação
-
-A avaliação considerará:
-
-- **Funcionalidade**  
-  Execução correta dos scripts e geração dos arquivos `.h5` e `.tflite`
-
-- **Edge AI**  
-  Conversão correta para `.tflite` e aplicação de técnica de otimização
-
-- **Documentação**  
-  Preenchimento adequado do relatório (README.md)
+O salvamento foi organizado para garantir que o arquivo .h5 original sirva como base de alta precisão, enquanto o .tflite atua como a versão de deploy para sistemas de baixa memória.
 
 ---
 
-## 📤 Passo 3: Instruções de Entrega
+## 5. Conversão e Otimização para TFLite (optimize_model.py)
+A etapa de conversão demonstra aprofundamento técnico em Edge AI através da aplicação de otimizações de pesos:
 
-### ✔️ Validação 
-
-Antes do envio, execute os scripts e confirme a geração dos arquivos:
-- `model.h5`
-- `model.tflite`
-
-
-
-### ⬆️ Envio do Código
-
-```bash
-git add .
-git commit -m "Entrega do desafio técnico - Seu Nome"
-git push origin main
-```
-
-
-
-### 🔍 Verificação Automática
-
-1. Acesse a aba **Actions** no GitHub  
-2. Verifique se o workflow foi executado com sucesso (✅)  
-3. Em caso de erro (❌), consulte os logs, corrija e envie novamente
-
-<img width="807" height="363" alt="image" src="https://github.com/user-attachments/assets/d991d35b-2bc2-48f7-9ac7-cf5ca9dc452a" />
-
-
-
-### 📎 Submissão Final
-
-Copie o link do seu repositório e envie conforme orientações do processo seletivo no Moodle.
+* **Técnica Utilizada:** Dynamic Range Quantization.
+* **Trade-off (Tamanho x Desempenho):** Esta técnica converte os pesos de ponto flutuante que ocupam 32 bits na memória para inteiros que ocupam apenas 8 bits.
+    * **Eficiência de Armazenamento:** A redução para 101 KB permite que o modelo seja armazenado em sistemas com memória Flash extremamente limitada.
+    * **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos), provando que a arquitetura proposta é resiliente à redução de precisão binária.
 
 ---
 
-## 📝 Relatório do Candidato
+## 6. Validação Comparativa (validate_comparison.py)
+Este script foi desenvolvido exclusivamente para validar e garantir a integridade do modelo após a otimização, não fazendo parte do processo de treino e otimização:
+* **Acurácia do H5  (Float32):** 0.9908
+* **Acurácia do TFLite  (Int8):** 0.9908
+* **Veredito:** Sucesso na manutenção da inteligência do modelo com redução significativa da ocupação de memória e otimização para inferência até mesmo em CPU de baixa potência.
 
-O arquivo (`README.md`) deve ser utilizado como **relatório final do desafio**.
+---
 
-Preencha todas as seções de forma clara e objetiva.
+## 7. Como Executar o Projeto
 
-> 💡 Dica: não é necessário um relatório extenso.  
-> O mais importante é demonstrar **clareza nas decisões técnicas**.
+1. **Ambiente:** Utilize o VS Code Dev Container fornecido (Python 3.11).
+2. **Dependências:**
+   `pip install -r requirements.txt`
+3. **Fluxo de Execução:**
 
+    * *1. Treinar o modelo e gerar o arquivo model.h5*
+    `python3 train_model.py`
 
+    * *2. Otimizar o modelo para TFLite e gerar o arquivo model.tflite*
+    `python3 optimize_model.py`
 
-**Exemplo:**
-
-👤 Identificação: **Nome Completo:**
-
-
-### 1️⃣ Resumo da Arquitetura do Modelo
-
-Descreva, em palavras, a arquitetura da **CNN** implementada no arquivo
-`train_model.py`.
-
-
-
-### 2️⃣ Bibliotecas Utilizadas
-
-Liste as principais bibliotecas utilizadas no projeto, preferencialmente
-com suas versões.
-
-
-
-### 3️⃣ Técnica de Otimização do Modelo
-
-Explique qual técnica foi utilizada para otimizar o modelo no arquivo
-`optimize_model.py`.
-
-
-
-### 4️⃣ Resultados Obtidos
-
-Informe o principal resultado obtido após o treinamento do modelo.
-
-
-
-### 5️⃣ Comentários Adicionais (Opcional)
-
-Utilize este espaço para comentar:
-- Dificuldades encontradas  
-- Decisões técnicas importantes  
-- Limitações do modelo  
-- Aprendizados durante o desafio
-
-
-## 🆘 Suporte
-
-Em caso de dúvidas:
-
-- Consulte o material dos cursos EAD
-- Leia atentamente este README
-- Analise os logs das GitHub Actions
-- Utilize os canais oficiais para contato com os instrutores
-
-Boa sorte no processo seletivo.
-****
+    * *3. Validar e comparar as métricas entre os dois modelos*
+    `python3 validate_comparison.py`
