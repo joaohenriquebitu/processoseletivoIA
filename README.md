@@ -37,10 +37,15 @@ O desempenho foi validado através das seguintes métricas:
 ## 4. Conversão e Otimização para TFLite (optimize_model.py)
 A etapa de conversão objetiva adaptar e compactar o modelo de IA para que ele seja compatível com as restrições de hardware dos dispositivos de borda.
 
-* **Técnica Utilizada:** Dynamic Range Quantization.
-* **Trade-off (Eficiência x Acurácia):** Esta técnica converte os pesos de ponto flutuante que ocupam 32 bits na memória para inteiros que ocupam apenas 8 bits.
-    * **Eficiência:** A redução para pesos de 8 bits permite que o modelo seja armazenado em sistemas com memória Flash extremamente limitada, além de que cálculos com inteiros exigem menos ciclos de CPU do que cálculos com ponto flutuante.
-    * **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos), provando que a arquitetura proposta é resiliente à redução de precisão binária.
+**Técnicas Utilizadas:**
+* **Dynamic Range Quantization:** Esta técnica converte os pesos de ponto flutuante que ocupam 32 bits na memória para inteiros que ocupam apenas 8 bits.
+* **Constant Folding:** Simplificação da topologia da rede ao pré-calcular operações constantes e fundir camadas redundantes para otimizar a execução na CPU.
+
+**Trade-off (Eficiência x Acurácia):**
+
+* **Eficiência:** A redução para pesos de 8 bits permite que o modelo seja armazenado em sistemas com memória Flash extremamente limitada, além de que cálculos com inteiros exigem menos ciclos de CPU. Somado a isso, o *Constant Folding* reduz o overhead de processamento ao simplificar o grafo da rede, eliminando operações redundantes e acelerando a inferência.
+* **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos).Além disso, como o *Constant Folding* lida apenas com a simplificação matemática de operações constantes sem alterar os pesos aprendidos, ele garante uma execução mais rápida sem qualquer degradação na inteligência do modelo.
+
 ---
 
 ## 5. Validação Comparativa (validate_comparison.py)
@@ -60,10 +65,10 @@ Este script valida a integridade do modelo após a otimização, comparando o de
 Para o teste, foi utilizado um processador **AMD Ryzen 5 5600** rodando em um ambiente WSL2, a execução foi limitada a um único núcleo de CPU via `taskset -c 0`:
 * **Tempo Total H5:** 1.52s
 * **Tempo Total TFLite:** 0.59s
-* **Ganho de Eficiência:** O modelo TFLite foi aproximadamente **2.6x mais rápido**, demonstrando maior eficiência por ciclo de CPU.
+* **Ganho de Eficiência:** O modelo TFLite foi aproximadamente **2.6x mais rápido**, demonstrando maior eficiência no uso da CPU.
 
 
-**Veredito:** Sucesso na manutenção da inteligência do modelo com redução significativa da ocupação de memória e otimização para inferência até mesmo em CPU de baixa potência.
+**Resultado:** Sucesso na manutenção da inteligência do modelo com redução significativa da ocupação de memória e otimização para inferência até mesmo em CPU de baixa potência.
 
 ---
 
