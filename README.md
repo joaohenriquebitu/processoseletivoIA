@@ -20,12 +20,13 @@ Para atingir o nível máximo de eficiência, a arquitetura foi desenhada seguin
     * **Max Pooling:** Segunda redução espacial.
     * **Layer 3 (Conv2D):** 64 filtros (3x3), ativação ReLU. Refinamento de características para a classificação final.
     * **Flatten & Dense:** Camada densa com 64 neurônios para lógica final de classificação e camada de saída com Softmax para as 10 classes (0-9).
-* **Justificativa:** O uso de MaxPooling entre as camadas garante que o modelo seja leve, processando apenas as informações essenciais e economizando ciclos de CPU, respeitando as restrições de tempo de execução do pipeline de integração contínua (CI).
+      
+O uso de MaxPooling entre as camadas garante que o modelo seja leve, processando apenas as informações essenciais e economizando ciclos de CPU.
 
 ---
 
 ## 3. Métricas de Resultado
-O desempenho foi validado através de métricas claras e precisas:
+O desempenho foi validado através das seguintes métricas:
 
 * **Acurácia:** O modelo atingiu 99.08% no conjunto de testes tanto no modelo original (Keras) quanto no otimizado (TFLite).
 * **Loss Function:** Utilizada a Sparse Categorical Crossentropy, ideal para classificação multiclasse de dígitos.
@@ -33,34 +34,40 @@ O desempenho foi validado através de métricas claras e precisas:
 
 ---
 
-## 4. Geração do Modelo Treinado e Comparativo de Tamanho
-Os artefatos foram salvos e otimizados, apresentando uma redução drástica no consumo de armazenamento:
+## 4. Conversão e Otimização para TFLite (optimize_model.py)
+A etapa de conversão objetiva adaptar e compactar o modelo de IA para que ele seja compatível com as restrições de hardware dos dispositivos de borda.
 
+* **Técnica Utilizada:** Dynamic Range Quantization.
+* **Trade-off (Eficiência x Acurácia):** Esta técnica converte os pesos de ponto flutuante que ocupam 32 bits na memória para inteiros que ocupam apenas 8 bits.
+    * **Eficiência:** A redução para pesos de 8 bits permite que o modelo seja armazenado em sistemas com memória Flash extremamente limitada, além de que cálculos com inteiros exigem menos ciclos de CPU do que cálculos com ponto flutuante.
+    * **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos), provando que a arquitetura proposta é resiliente à redução de precisão binária.
+---
+
+## 5. Validação Comparativa (validate_comparison.py)
+Este script valida a integridade do modelo após a otimização, comparando o desempenho sob restrições de hardware:
+
+### Comparativo de Acurácia
+* **Acurácia do H5 (Float32):** 0.9908
+* **Acurácia do TFLite (Int8):** 0.9908
+* **Resultado:** A precisão foi mantida integralmente, provando que a quantização não degradou a inteligência do modelo.
+
+### Comparativo de Tamanho (Armazenamento)
 * **Modelo Keras (model.h5):** 1,11 MB
 * **Modelo TFLite (model.tflite):** 101 KB
 * **Taxa de Compressão:** Redução de aproximadamente 91% no tamanho total do arquivo.
 
----
+### Comparativo de Latência (Teste em Single-Core)
+Para o teste, foi utilizado um processador **AMD Ryzen 5 5600** rodando em um ambiente WSL2, a execução foi limitada a um único núcleo de CPU via `taskset -c 0`:
+* **Tempo Total H5:** 1.52s
+* **Tempo Total TFLite:** 0.59s
+* **Ganho de Eficiência:** O modelo TFLite foi aproximadamente **2.6x mais rápido**, demonstrando maior eficiência por ciclo de CPU.
 
-## 5. Conversão e Otimização para TFLite (optimize_model.py)
-A etapa de conversão demonstra aprofundamento técnico em Edge AI através da aplicação de otimizações de pesos:
 
-* **Técnica Utilizada:** Dynamic Range Quantization.
-* **Trade-off (Tamanho x Desempenho):** Esta técnica converte os pesos de ponto flutuante que ocupam 32 bits na memória para inteiros que ocupam apenas 8 bits.
-    * **Eficiência de Armazenamento:** A redução para 101 KB permite que o modelo seja armazenado em sistemas com memória Flash extremamente limitada.
-    * **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos), provando que a arquitetura proposta é resiliente à redução de precisão binária.
-
----
-
-## 6. Validação Comparativa (validate_comparison.py)
-Este script foi desenvolvido exclusivamente para validar e garantir a integridade do modelo após a otimização, não fazendo parte do processo de treino e otimização:
-* **Acurácia do H5  (Float32):** 0.9908
-* **Acurácia do TFLite  (Int8):** 0.9908
-* **Veredito:** Sucesso na manutenção da inteligência do modelo com redução significativa da ocupação de memória e otimização para inferência até mesmo em CPU de baixa potência.
+**Veredito:** Sucesso na manutenção da inteligência do modelo com redução significativa da ocupação de memória e otimização para inferência até mesmo em CPU de baixa potência.
 
 ---
 
-## 7. Como Executar o Projeto
+## 6. Como Executar o Projeto
 
 1. **Ambiente:** Este projeto foi feito utilizando o VS Code Dev Container fornecido (Python 3.11).
 2. **Dependências:**
