@@ -2,20 +2,19 @@ import numpy as np
 import tensorflow as tf
 import time
 
-#Este script foi desenvolvido exclusivamente para validar e garantir a integridade do modelo após a otimização, comparando o modelo original com o otimizado, não fazendo parte do processo de treino e otimização.
+# Este script foi desenvolvido exclusivamente para validar e garantir a integridade do modelo após a otimização, comparando o modelo original com o otimizado, não fazendo parte do processo de treino e otimização.
+
 
 def main():
 
     (_, _), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
     x_test_norm = x_test.reshape(-1, 28, 28, 1).astype("float32") / 255.0
 
-
     model_h5 = tf.keras.models.load_model("model.h5")
 
     start_time = time.time()
     loss_h5, acc_h5 = model_h5.evaluate(x_test_norm, y_test, verbose=0)
     duration_h5 = time.time() - start_time
-
 
     interpreter = tf.lite.Interpreter(model_path="model.tflite")
     interpreter.allocate_tensors()
