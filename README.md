@@ -40,8 +40,6 @@ Os artefatos foram salvos e otimizados, apresentando uma redução drástica no 
 * **Modelo TFLite (model.tflite):** 101 KB
 * **Taxa de Compressão:** Redução de aproximadamente 91% no tamanho total do arquivo.
 
-O salvamento foi organizado para garantir que o arquivo .h5 original sirva como base de alta precisão, enquanto o .tflite atua como a versão de deploy para sistemas de baixa memória.
-
 ---
 
 ## 5. Conversão e Otimização para TFLite (optimize_model.py)
@@ -72,7 +70,7 @@ Este script foi desenvolvido exclusivamente para validar e garantir a integridad
 
         * NumPy: 2.4.4
           
-    Podem ser instaladas por meio do comando:
+    As bibliotecas podem ser instaladas por meio do comando:
 
    `pip install -r requirements.txt`
 3. **Fluxo de Execução:**
@@ -83,5 +81,5 @@ Este script foi desenvolvido exclusivamente para validar e garantir a integridad
     * *2. Otimizar o modelo para TFLite e gerar o arquivo model.tflite*
     `python3 optimize_model.py`
 
-    * *3. Utilizar `python3 validate_comparison.py` caso queira validar e comparar as métricas entre os dois modelos*
+    * *3. Utilizar `python3 validate_comparison.py` caso queira validar e comparar as métricas entre o modelo original e o otimizado*
     
