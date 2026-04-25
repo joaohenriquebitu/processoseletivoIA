@@ -44,7 +44,7 @@ A etapa de conversão objetiva adaptar e compactar o modelo de IA para que ele s
 **Trade-off (Eficiência x Acurácia):**
 
 * **Eficiência:** A redução para pesos de 8 bits permite que o modelo seja armazenado em sistemas com memória Flash extremamente limitada, além de que cálculos com inteiros exigem menos ciclos de CPU. Somado a isso, o *Constant Folding* reduz o overhead de processamento ao simplificar o grafo da rede, eliminando operações redundantes e acelerando a inferência.
-* **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos).Além disso, como o *Constant Folding* lida apenas com a simplificação matemática de operações constantes sem alterar os pesos aprendidos, ele garante uma execução mais rápida sem qualquer degradação na inteligência do modelo.
+* **Impacto na Acurácia:** A perda de precisão foi inexistente neste projeto (99.08% mantidos em ambos os formatos). Além disso, como o *Constant Folding* lida apenas com a simplificação matemática de operações constantes sem alterar os pesos aprendidos, ele garante uma execução mais rápida sem qualquer degradação na inteligência do modelo.
 
 ---
 
