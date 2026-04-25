@@ -64,8 +64,15 @@ Este script foi desenvolvido exclusivamente para validar e garantir a integridad
 
 ## 7. Como Executar o Projeto
 
-1. **Ambiente:** Utilize o VS Code Dev Container fornecido (Python 3.11).
+1. **Ambiente:** Este projeto foi feito utilizando o VS Code Dev Container fornecido (Python 3.11).
 2. **Dependências:**
+    * Bibliotecas utilizadas:
+
+        * TensorFlow: 2.21.0
+
+        * NumPy: 2.4.4
+    Podem ser instaladas por meio do comando:
+
    `pip install -r requirements.txt`
 3. **Fluxo de Execução:**
 
@@ -75,5 +82,5 @@ Este script foi desenvolvido exclusivamente para validar e garantir a integridad
     * *2. Otimizar o modelo para TFLite e gerar o arquivo model.tflite*
     `python3 optimize_model.py`
 
-    * *3. Validar e comparar as métricas entre os dois modelos*
-    `python3 validate_comparison.py`
+    * *3. Utilizar `python3 validate_comparison.py` caso queira validar e comparar as métricas entre os dois modelos*
+    
