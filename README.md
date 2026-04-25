@@ -71,6 +71,7 @@ Este script foi desenvolvido exclusivamente para validar e garantir a integridad
         * TensorFlow: 2.21.0
 
         * NumPy: 2.4.4
+          
     Podem ser instaladas por meio do comando:
 
    `pip install -r requirements.txt`
